@@ -84,7 +84,6 @@ def checkout(request):
                     return redirect(reverse('view_bag'))
 
             request.session['save_info'] = 'save-info' in request.POST
-            print(request.__dict__)
             return redirect(reverse('checkout_success', args=[order.order_number]))
         else:
             messages.error(request, 'There was an error with your form. \
@@ -142,7 +141,6 @@ def checkout_success(request, order_number):
     Handle successful checkouts
     """
     save_info = request.session.get('save_info')
-    print(save_info)
     order = get_object_or_404(Order, order_number=order_number)
 
     if request.user.is_authenticated:
@@ -163,10 +161,9 @@ def checkout_success(request, order_number):
                 'default_county': order.county,
             }
             user_profile_form = UserProfileForm(profile_data, instance=profile)
-            print(user_profile_form.errors)
+
             if user_profile_form.is_valid():
                 user_profile_form.save()
-                print('profile info saved')
 
     messages.success(request, f'Order successfully processed! \
         Your order number is {order_number}. A confirmation \
